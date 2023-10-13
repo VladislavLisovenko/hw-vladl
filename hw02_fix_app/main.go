@@ -3,9 +3,9 @@ package main
 import (
 	"fmt"
 
-	"github.com/fixme_my_friend/hw02_fix_app/printer"
-	"github.com/fixme_my_friend/hw02_fix_app/reader"
-	"github.com/fixme_my_friend/hw02_fix_app/types"
+	"github.com/VladislavLisovenko/hw-vladl/hw02_fix_app/printer"
+	"github.com/VladislavLisovenko/hw-vladl/hw02_fix_app/reader"
+	"github.com/VladislavLisovenko/hw-vladl/hw02_fix_app/types"
 )
 
 func main() {
@@ -22,6 +22,10 @@ func main() {
 	}
 
 	staff, err = reader.ReadJSON(path)
+	if err != nil {
+		fmt.Printf("Error: %v", err)
+		return
+	}
 
 	fmt.Print(err)
 
