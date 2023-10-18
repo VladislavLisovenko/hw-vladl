@@ -23,7 +23,7 @@ func NewBookComparator(cm CompareMethod) *BookComparator {
 	}
 }
 
-func (bc BookComparator) compare(b1 *Book, b2 *Book) (bool, error) {
+func (bc BookComparator) Compare(b1 *Book, b2 *Book) (bool, error) {
 	switch bc.compareMethod {
 	case ByYear:
 		return b1.Year() > b2.Year(), nil
@@ -112,7 +112,7 @@ func main() {
 	}
 
 	comparator := NewBookComparator(ByRate)
-	r, err := comparator.compare(b1, b2)
+	r, err := comparator.Compare(b1, b2)
 	if err != nil {
 		fmt.Println(err)
 		return
