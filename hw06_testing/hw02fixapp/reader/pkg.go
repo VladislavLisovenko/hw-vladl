@@ -3,9 +3,10 @@ package reader
 import (
 	"encoding/json"
 	"fmt"
-	"hw02fixapp/types"
 	"io"
 	"os"
+
+	"github.com/VladislavLisovenko/hw-vladl/hw06_testing/hw02fixapp/types"
 )
 
 func ReadJSON(filePath string) ([]types.Employee, error) {

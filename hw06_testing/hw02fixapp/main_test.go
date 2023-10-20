@@ -1,10 +1,10 @@
 package hw02fixapp
 
 import (
-	"hw02fixapp/reader"
 	"os"
 	"testing"
 
+	"github.com/VladislavLisovenko/hw-vladl/hw06_testing/hw02fixapp/reader"
 	"github.com/stretchr/testify/require"
 )
 
@@ -37,7 +37,6 @@ func TestReadJSON(t *testing.T) {
 	for _, td := range tests {
 		td := td
 		t.Run(td.descr, func(t *testing.T) {
-
 			if _, er := os.Stat(td.path); er != nil {
 				require.Error(t, er)
 			} else {
@@ -48,7 +47,6 @@ func TestReadJSON(t *testing.T) {
 				}
 				require.Equal(t, td.expected, len(got))
 			}
-
 		})
 	}
 }
