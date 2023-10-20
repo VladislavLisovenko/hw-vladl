@@ -6,6 +6,9 @@ use (
 	./hw04_struct_comparator
 	./hw05_shapes
 	./hw06_testing
+        ./hw06_testing/hw03_chessboard
+        ./hw06_testing/hw04_struct_comparator
+        ./hw06_testing/hw05_shapes
 	./hw07_word_counter
 	./hw08_binary_search
 	./hw09_serialize
