@@ -1,4 +1,4 @@
-module hw-vladl/hw05_shapes
+module hw02fixapp
 
 go 1.20
 
