@@ -31,7 +31,7 @@ func tests() []struct {
 		},
 		{
 			descr: "two repeated words",
-			text:  "one, 	two?.\n    one-two. one",
+			text:  "one, 	Two?.\n    one-\rtwo. One",
 			expected: map[string]int{
 				"one": 3,
 				"two": 2,

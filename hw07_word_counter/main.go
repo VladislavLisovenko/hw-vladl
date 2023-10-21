@@ -13,21 +13,20 @@ func extraSymbols() []string {
 		"-",
 		"\t",
 		"\n",
+		"\r",
 	}
 }
 
 func countWords(text string) map[string]int {
 	m := map[string]int{}
+	text = strings.ToLower(text)
 
 	for _, s := range extraSymbols() {
 		text = strings.ReplaceAll(text, s, " ")
 	}
 
-	words := strings.Split(text, " ")
+	words := strings.Fields(text)
 	for _, word := range words {
-		if word == "" {
-			continue
-		}
 		m[word]++
 	}
 
