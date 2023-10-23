@@ -15,6 +15,10 @@ func Search(data []int, number int) bool {
 		return number == data[0] || number == data[1]
 	}
 
+	if number < data[0] || number > data[dataLength-1] {
+		return false
+	}
+
 	startIndex := 0
 	lastIndex := dataLength - 1
 

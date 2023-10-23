@@ -72,6 +72,18 @@ func tests() []struct {
 			number:     99,
 			expected:   false,
 		},
+		{
+			descr:      "number less first number",
+			dataSource: []int{1, 2, 3, 4, 5, 6, 7, 8, 9},
+			number:     0,
+			expected:   false,
+		},
+		{
+			descr:      "number more last number",
+			dataSource: []int{1, 2, 3, 4, 5, 6, 7, 8, 9},
+			number:     15,
+			expected:   false,
+		},
 	}
 }
 
