@@ -12,19 +12,16 @@ func Search(data []int, number int) (int, bool) {
 	case 1:
 		if number == data[0] {
 			return 0, true
-		} else {
-			return -1, false
 		}
+		return -1, false
 	case 2:
 		if number != data[0] && number != data[1] {
 			return -1, false
-		} else {
-			if number == data[0] {
-				return 0, true
-			} else {
-				return 1, true
-			}
 		}
+		if number == data[0] {
+			return 0, true
+		}
+		return 1, true
 	}
 
 	if number < data[0] || number > data[dataLength-1] {
@@ -49,11 +46,12 @@ func Search(data []int, number int) (int, bool) {
 		}
 
 		if lastIndex-startIndex == 1 {
-			if number == data[startIndex] {
+			switch number {
+			case data[startIndex]:
 				return startIndex, true
-			} else if number == data[lastIndex] {
+			case data[lastIndex]:
 				return lastIndex, true
-			} else {
+			default:
 				return -1, false
 			}
 		}
