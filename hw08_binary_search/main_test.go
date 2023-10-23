@@ -61,28 +61,16 @@ func tests() []struct {
 			expected:   false,
 		},
 		{
-			descr:      "sorted slice contains number",
+			descr:      "slice contains number",
 			dataSource: []int{1, 2, 3, 4, 5, 6, 7, 8, 9},
 			number:     4,
 			expected:   true,
 		},
 		{
-			descr:      "sorted slice doesn't contains number",
+			descr:      "slice doesn't contains number",
 			dataSource: []int{1, 2, 3, 4, 5, 6, 7, 8, 9},
 			number:     99,
 			expected:   false,
-		},
-		{
-			descr:      "unsorted slice doesn't contains number",
-			dataSource: []int{91, 2, 32, 41, 15, 56, 37, 28, 19},
-			number:     99,
-			expected:   false,
-		},
-		{
-			descr:      "unsorted slice contains number",
-			dataSource: []int{91, 2, 32, 41, 15, 56, 37, 28, 19},
-			number:     32,
-			expected:   true,
 		},
 	}
 }

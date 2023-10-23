@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"sort"
 )
 
 func Search(data []int, number int) bool {
@@ -15,8 +14,6 @@ func Search(data []int, number int) bool {
 	case 2:
 		return number == data[0] || number == data[1]
 	}
-
-	sort.Ints(data)
 
 	startIndex := 0
 	lastIndex := dataLength - 1
