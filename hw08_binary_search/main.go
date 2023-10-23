@@ -4,19 +4,31 @@ import (
 	"fmt"
 )
 
-func Search(data []int, number int) bool {
+func Search(data []int, number int) (int, bool) {
 	dataLength := len(data)
 	switch dataLength {
 	case 0:
-		return false
+		return -1, false
 	case 1:
-		return number == data[0]
+		if number == data[0] {
+			return 0, true
+		} else {
+			return -1, false
+		}
 	case 2:
-		return number == data[0] || number == data[1]
+		if number != data[0] && number != data[1] {
+			return -1, false
+		} else {
+			if number == data[0] {
+				return 0, true
+			} else {
+				return 1, true
+			}
+		}
 	}
 
 	if number < data[0] || number > data[dataLength-1] {
-		return false
+		return -1, false
 	}
 
 	startIndex := 0
@@ -27,7 +39,7 @@ func Search(data []int, number int) bool {
 		curNumber := data[i]
 
 		if curNumber == number {
-			return true
+			return i, true
 		}
 
 		if curNumber > number {
@@ -37,17 +49,23 @@ func Search(data []int, number int) bool {
 		}
 
 		if lastIndex-startIndex == 1 {
-			return data[startIndex] == number || data[lastIndex] == number
+			if number == data[startIndex] {
+				return startIndex, true
+			} else if number == data[lastIndex] {
+				return lastIndex, true
+			} else {
+				return -1, false
+			}
 		}
 	}
 
-	return false
+	return -1, false
 }
 
 func main() {
 	data := []int{4, 5}
-	number := 3
+	number := 4
 
-	res := Search(data, number)
-	fmt.Println(res)
+	ind, res := Search(data, number)
+	fmt.Println(ind, res)
 }
