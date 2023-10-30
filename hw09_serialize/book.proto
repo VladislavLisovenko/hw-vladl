@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package main;
 
-option go_package='/model';
+option go_package='/bookproto';
 
 message Book {
     uint64 ID = 1;
