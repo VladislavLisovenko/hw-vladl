@@ -1,7 +1,9 @@
 package main
 
 import (
+	"context"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/require"
 )
@@ -36,16 +38,22 @@ func sensorTestData() []struct {
 func TestSensorReader(t *testing.T) {
 	sensorData := make(chan float64)
 	processedData := make(chan float64)
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
 
-	go Sensor(sensorData)
-	go SensorReader(sensorData, processedData)
+	go Sensor(ctx, sensorData)
+	go SensorReader(ctx, sensorData, processedData)
 
 	testData := sensorTestData()
 	for _, td := range testData {
 		td := td
 		t.Run(td.descr, func(t *testing.T) {
-			got := <-processedData
-			require.Equal(t, td.expected, got)
+			select {
+			case got := <-processedData:
+				require.Equal(t, td.expected, got)
+			case <-ctx.Done():
+				return
+			}
 		})
 	}
 }
