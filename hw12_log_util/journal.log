@@ -1,0 +1,14 @@
+info;Process 1 started
+info;Process 2 started
+info;Process 3 started
+info;Process 4 started
+warning;Process 1 paused
+warning;Process 3 paused
+error;Process 2 unable to connect to database
+info;Process 2 finished
+error;Process 4 unable to connect to database
+info;Process 4 finished
+warning;Process 1 resumed
+warning;Process 3 resumed
+info;Process 1 finished
+info;Process 3 finished
