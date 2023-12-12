@@ -22,7 +22,7 @@ type Response struct {
 func encodedMessage(text string) ([]byte, error) {
 	message := &Message{
 		Content: text,
-		Date:    time.Now().Format(time.DateOnly),
+		Date:    time.Now().String(),
 	}
 
 	return json.Marshal(message)
