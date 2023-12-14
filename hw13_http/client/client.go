@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"net/http"
 	"os"
-	"time"
 )
 
 type Message struct {
@@ -22,7 +21,6 @@ type Response struct {
 func encodedMessage(text string) ([]byte, error) {
 	message := &Message{
 		Content: text,
-		Date:    time.Now().String(),
 	}
 
 	return json.Marshal(message)

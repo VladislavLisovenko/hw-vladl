@@ -5,14 +5,13 @@ import (
 	"flag"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
-	"os"
 	"time"
 )
 
 type Message struct {
 	Content string `json:"content"`
-	Date    string `json:"date"`
 }
 
 type Response struct {
@@ -30,7 +29,7 @@ func decodedMessage(body io.ReadCloser) (Message, error) {
 }
 
 func encodedResponse(message Message) ([]byte, error) {
-	responseText := fmt.Sprintf("Message '%s' from %s, got", message.Content, message.Date)
+	responseText := fmt.Sprintf("Message '%s', got", message.Content)
 
 	response := &Response{
 		Content: responseText,
@@ -40,22 +39,31 @@ func encodedResponse(message Message) ([]byte, error) {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet && r.Method != http.MethodPost {
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte("Methods allowed: GET, POST"))
+		return
+	}
+
 	message, err := decodedMessage(r.Body)
 	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(1)
+		w.WriteHeader(http.StatusBadRequest)
+		w.Write([]byte(err.Error()))
+		return
 	}
 
 	encodedResponse, err := encodedResponse(message)
 	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(1)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
 	}
 
 	_, err = w.Write(encodedResponse)
 	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(1)
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write([]byte(err.Error()))
+		return
 	}
 }
 
@@ -74,7 +82,6 @@ func main() {
 	srv.Addr = fmt.Sprintf("%s:%s", url, port)
 	err := srv.ListenAndServe()
 	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(1)
+		log.Fatalln(err.Error())
 	}
 }
