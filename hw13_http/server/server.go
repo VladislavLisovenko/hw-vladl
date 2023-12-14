@@ -41,28 +41,40 @@ func encodedResponse(message Message) ([]byte, error) {
 func handler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet && r.Method != http.MethodPost {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte("Methods allowed: GET, POST"))
+		_, err := w.Write([]byte("Methods allowed: GET, POST"))
+		if err != nil {
+			log.Fatalln(err.Error())
+		}
 		return
 	}
 
 	message, err := decodedMessage(r.Body)
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)
-		w.Write([]byte(err.Error()))
+		_, err := w.Write([]byte(err.Error()))
+		if err != nil {
+			log.Fatalln(err.Error())
+		}
 		return
 	}
 
 	encodedResponse, err := encodedResponse(message)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		_, err := w.Write([]byte(err.Error()))
+		if err != nil {
+			log.Fatalln(err.Error())
+		}
 		return
 	}
 
 	_, err = w.Write(encodedResponse)
 	if err != nil {
 		w.WriteHeader(http.StatusInternalServerError)
-		w.Write([]byte(err.Error()))
+		_, err := w.Write([]byte(err.Error()))
+		if err != nil {
+			log.Fatalln(err.Error())
+		}
 		return
 	}
 }
