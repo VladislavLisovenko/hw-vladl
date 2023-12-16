@@ -40,22 +40,26 @@ func encodedResponse(message Message) ([]byte, error) {
 
 func handler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != http.MethodGet && r.Method != http.MethodPost {
-		w.WriteHeader(http.StatusBadRequest)
+		w.WriteHeader(http.StatusMethodNotAllowed)
 		_, err := w.Write([]byte("Methods allowed: GET, POST"))
 		if err != nil {
-			log.Fatalln(err.Error())
+			fmt.Println(err.Error())
 		}
 		return
 	}
 
-	message, err := decodedMessage(r.Body)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		_, err := w.Write([]byte(err.Error()))
+	message := Message{Content: "GET request received"}
+	if r.Method == http.MethodPost {
+		var err error
+		message, err = decodedMessage(r.Body)
 		if err != nil {
-			log.Fatalln(err.Error())
+			w.WriteHeader(http.StatusBadRequest)
+			_, err := w.Write([]byte(err.Error()))
+			if err != nil {
+				fmt.Println(err.Error())
+			}
+			return
 		}
-		return
 	}
 
 	encodedResponse, err := encodedResponse(message)
@@ -63,7 +67,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		_, err := w.Write([]byte(err.Error()))
 		if err != nil {
-			log.Fatalln(err.Error())
+			fmt.Println(err.Error())
 		}
 		return
 	}
@@ -73,7 +77,7 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusInternalServerError)
 		_, err := w.Write([]byte(err.Error()))
 		if err != nil {
-			log.Fatalln(err.Error())
+			fmt.Println(err.Error())
 		}
 		return
 	}
