@@ -36,7 +36,7 @@ func (t Triangle) Area() float64 {
 	return (t.base * t.height) / 2
 }
 
-func calculateArea(s any) (float64, error) {
+func CalculateArea(s any) (float64, error) {
 	switch o := s.(type) {
 	case Shape:
 		return o.Area(), nil
@@ -53,7 +53,7 @@ func main() {
 	circle := &Circle{
 		radius: 5,
 	}
-	area, err := calculateArea(circle)
+	area, err := CalculateArea(circle)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -64,7 +64,7 @@ func main() {
 		width:  10,
 		height: 5,
 	}
-	area, err = calculateArea(rect)
+	area, err = CalculateArea(rect)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -75,7 +75,7 @@ func main() {
 		base:   8,
 		height: 6,
 	}
-	area, err = calculateArea(triangle)
+	area, err = CalculateArea(triangle)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -85,7 +85,7 @@ func main() {
 	square := &Square{
 		side: 6,
 	}
-	area, err = calculateArea(square)
+	area, err = CalculateArea(square)
 	if err != nil {
 		fmt.Println(err)
 		return
