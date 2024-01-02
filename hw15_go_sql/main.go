@@ -18,7 +18,6 @@ func main() {
 
 	err = db.Ping()
 	if err != nil {
-		log.Fatalf("Failed to connect to db: %v", err)
+		fmt.Printf("Failed to connect to db: %v", err)
 	}
-	fmt.Println("Connection established!")
 }
