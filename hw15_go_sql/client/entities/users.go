@@ -14,7 +14,3 @@ func (u *User) GetID() int {
 func (u *User) SetID(id int) {
 	u.ID = id
 }
-
-func (u *User) Type() string {
-	return "user"
-}

@@ -13,7 +13,3 @@ func (p *Product) GetID() int {
 func (p *Product) SetID(id int) {
 	p.ID = id
 }
-
-func (p *Product) Type() string {
-	return "product"
-}

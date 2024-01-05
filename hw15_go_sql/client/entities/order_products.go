@@ -1,19 +1,15 @@
 package entities
 
-type OrderProducts struct {
+type OrderProduct struct {
 	ID        int `json:"id"`
 	OrderID   int `json:"orderId"`
 	ProductID int `json:"productId"`
 }
 
-func (o *OrderProducts) GetID() int {
+func (o *OrderProduct) GetID() int {
 	return o.ID
 }
 
-func (o *OrderProducts) SetID(id int) {
+func (o *OrderProduct) SetID(id int) {
 	o.ID = id
-}
-
-func (o *OrderProducts) Type() string {
-	return "order_product"
 }

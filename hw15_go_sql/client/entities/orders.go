@@ -16,7 +16,3 @@ func (o *Order) GetID() int {
 func (o *Order) SetID(id int) {
 	o.ID = id
 }
-
-func (o *Order) Type() string {
-	return "order"
-}
