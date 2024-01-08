@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"fmt"
-	"log"
 	"net/http"
 	"time"
 
@@ -32,17 +31,11 @@ func main() {
 	router.Post("/orders/{id:[0-9]+}", handlers.UpdateOrder)
 	router.Delete("/orders/{id:[0-9]+}", handlers.DeleteOrder)
 
-	router.Post("/order_products", handlers.AddOrderProduct)
-	router.Post("/order_products/{id:[0-9]+}", handlers.UpdateOrderProduct)
-	router.Delete("/order_products/{id:[0-9]+}", handlers.DeleteOrderProduct)
-
 	srv := &http.Server{
 		ReadTimeout:  5 * time.Second,
 		WriteTimeout: 10 * time.Second,
+		Handler:      router,
 	}
 	srv.Addr = fmt.Sprintf("%s:%s", url, port)
-	err := srv.ListenAndServe()
-	if err != nil {
-		log.Fatalln(err.Error())
-	}
+	srv.ListenAndServe()
 }

@@ -1,8 +1,17 @@
 package db
 
-func AddProduct(name string, price float64) (int, error) {
+import "github.com/VladislavLisovenko/hw-vladl/hw15_go_sql/server/entities"
+
+func AddProduct(entity entities.Product) (int, error) {
+	name := entity.Name
+	price := entity.Price
+
 	lastInsertedID := 0
-	row := database.QueryRow("INSERT INTO public.\"Products\"(name, price) VALUES ($1, $2) returning id", name, price)
+	queryString := `
+	INSERT INTO public."Products"(name, price)
+	VALUES ($1, $2) 
+	returning id`
+	row := database.QueryRow(queryString, name, price)
 	err := row.Scan(&lastInsertedID)
 	if err != nil {
 		return 0, err
@@ -11,8 +20,16 @@ func AddProduct(name string, price float64) (int, error) {
 	return lastInsertedID, nil
 }
 
-func UpdateProduct(id int, name string, price float64) error {
-	_, err := database.Exec("update public.\"Products\" set name=$1, price=$2 where id=$3", name, price, id)
+func UpdateProduct(entity entities.Product) error {
+	id := entity.GetID()
+	name := entity.Name
+	price := entity.Price
+
+	queryString := `
+	update public."Products"
+	set name=$1, price=$2 
+	where id=$3`
+	_, err := database.Exec(queryString, name, price, id)
 	if err != nil {
 		return err
 	}
@@ -21,7 +38,10 @@ func UpdateProduct(id int, name string, price float64) error {
 }
 
 func DeleteProduct(id int) error {
-	_, err := database.Exec("delete from public.\"Products\" where id=$1", id)
+	queryString := `
+	delete from public."Products"
+	where id=$1`
+	_, err := database.Exec(queryString, id)
 	if err != nil {
 		return err
 	}

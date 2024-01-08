@@ -1,28 +1,18 @@
 package handlers
 
 import (
-	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
 
 	"github.com/VladislavLisovenko/hw-vladl/hw15_go_sql/server/db"
 	"github.com/VladislavLisovenko/hw-vladl/hw15_go_sql/server/entities"
-	"github.com/go-chi/chi"
 )
 
 func AddUser(w http.ResponseWriter, r *http.Request) {
-	var entity entities.User
-	err := json.NewDecoder(r.Body).Decode(&entity)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		_, err = w.Write([]byte(err.Error()))
-		if err != nil {
-			fmt.Println(err.Error())
-		}
-	}
+	entity := decodeEntity[entities.User](w, r)
 
-	id, err := db.AddUser(entity.Name, entity.Email, entity.Password)
+	id, err := db.AddUser(entity)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
@@ -30,33 +20,18 @@ func AddUser(w http.ResponseWriter, r *http.Request) {
 }
 
 func UpdateUser(w http.ResponseWriter, r *http.Request) {
-	var entity entities.User
-	err := json.NewDecoder(r.Body).Decode(&entity)
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		_, err = w.Write([]byte(err.Error()))
-		if err != nil {
-			fmt.Println(err.Error())
-		}
-	}
+	entity := decodeEntity[entities.User](w, r)
 
-	err = db.UpdateUser(entity.GetID(), entity.Name, entity.Email, entity.Password)
+	err := db.UpdateUser(entity)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
 }
 
 func DeleteUser(w http.ResponseWriter, r *http.Request) {
-	entityID, err := strconv.Atoi(chi.URLParam(r, "id"))
-	if err != nil {
-		w.WriteHeader(http.StatusBadRequest)
-		_, err = w.Write([]byte(err.Error()))
-		if err != nil {
-			fmt.Println(err.Error())
-		}
-	}
+	entityID := decodeEntityID[entities.User](w, r)
 
-	err = db.DeleteUser(entityID)
+	err := db.DeleteUser(entityID)
 	if err != nil {
 		fmt.Println(err.Error())
 	}

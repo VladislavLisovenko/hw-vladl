@@ -9,7 +9,3 @@ type Product struct {
 func (p *Product) GetID() int {
 	return p.ID
 }
-
-func (p *Product) SetID(id int) {
-	p.ID = id
-}

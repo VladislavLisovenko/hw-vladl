@@ -30,7 +30,7 @@ func sendRequest(url string, method string, message []byte) (*http.Response, err
 	return response, nil
 }
 
-func processEntity[T entities.Entity](url string, httpMethod string, entity T) {
+func processEntity[T entities.HasID](url string, httpMethod string, entity T) {
 	encMessage, err := json.Marshal(entity)
 	if err != nil {
 		log.Fatalln(err.Error())
@@ -101,44 +101,25 @@ func main() {
 	}
 	for _, p := range products {
 		processEntity(addr, http.MethodPost, p)
-
-		addrUpdate := fmt.Sprintf("%s/%s/%d", url, "products", p.GetID())
-		p.Price /= 10
-		processEntity(addrUpdate, http.MethodPost, p)
 	}
 
 	// order
 	order := &entities.Order{
-		UserID:      user.GetID(),
-		OrderDate:   time.Now(),
-		TotalAmount: 500000,
+		UserID:    user.GetID(),
+		OrderDate: time.Now(),
+		Products:  products,
 	}
 	addr = fmt.Sprintf("%s/%s", url, "orders")
 	processEntity(addr, http.MethodPost, order)
 
+	for _, p := range products {
+		p.Price /= 10
+	}
 	order.OrderDate = time.Date(2024, time.April, 22, 5, 0, 0, 0, time.Local)
 	addr = fmt.Sprintf("%s/%s/%d", url, "orders", order.GetID())
 	processEntity(addr, http.MethodPost, order)
 
-	// orderProducts
-	orderProducts := []*entities.OrderProduct{}
-	for _, p := range products {
-		orderProducts = append(orderProducts, &entities.OrderProduct{
-			OrderID:   order.GetID(),
-			ProductID: p.GetID(),
-		})
-	}
-	addr = fmt.Sprintf("%s/%s", url, "order_products")
-	for _, orderProduct := range orderProducts {
-		processEntity(addr, http.MethodPost, orderProduct)
-	}
-
 	// data removing
-	for _, orderProduct := range orderProducts {
-		addr = fmt.Sprintf("%s/%s/%d", url, "order_products", orderProduct.GetID())
-		processEntityRemoving(addr)
-	}
-
 	addr = fmt.Sprintf("%s/%s/%d", url, "orders", order.GetID())
 	processEntityRemoving(addr)
 

@@ -10,7 +10,3 @@ type User struct {
 func (u *User) GetID() int {
 	return u.ID
 }
-
-func (u *User) SetID(id int) {
-	u.ID = id
-}

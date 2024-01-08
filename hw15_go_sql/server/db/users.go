@@ -1,8 +1,16 @@
 package db
 
-func AddUser(name string, email string, password string) (int, error) {
+import "github.com/VladislavLisovenko/hw-vladl/hw15_go_sql/server/entities"
+
+func AddUser(entity entities.User) (int, error) {
+	name := entity.Name
+	email := entity.Email
+	password := entity.Password
+
 	lastInsertedID := 0
-	queryString := "INSERT INTO public.\"Users\"(name, email, password) VALUES ($1, $2, $3) returning id"
+	queryString := `
+	INSERT INTO public."Users"(name, email, password)
+	VALUES ($1, $2, $3) returning id`
 	row := database.QueryRow(queryString, name, email, password)
 	err := row.Scan(&lastInsertedID)
 	if err != nil {
@@ -12,8 +20,16 @@ func AddUser(name string, email string, password string) (int, error) {
 	return lastInsertedID, nil
 }
 
-func UpdateUser(id int, name string, email string, password string) error {
-	queryString := "update public.\"Users\" set name=$1, email=$2, password=$3 where id=$4"
+func UpdateUser(entity entities.User) error {
+	id := entity.GetID()
+	name := entity.Name
+	email := entity.Email
+	password := entity.Password
+
+	queryString := `
+	update public."Users" 
+	set name=$1, email=$2, password=$3 
+	where id=$4`
 	_, err := database.Exec(queryString, name, email, password, id)
 	if err != nil {
 		return err
@@ -23,7 +39,7 @@ func UpdateUser(id int, name string, email string, password string) error {
 }
 
 func DeleteUser(id int) error {
-	queryString := "delete from public.\"Users\" where id=$1"
+	queryString := `delete from public."Users" where id=$1`
 	_, err := database.Exec(queryString, id)
 	if err != nil {
 		return err
