@@ -52,6 +52,22 @@ func processEntity[T entities.HasID](url string, httpMethod string, entity T) {
 	}
 }
 
+func processEntityList[T []entities.User | []entities.Product | []entities.Order](url string) T {
+	response, err := sendRequest(url, http.MethodGet, nil)
+	if err != nil {
+		log.Fatalf("%s on GET error: %s", url, err.Error())
+	}
+	defer response.Body.Close()
+
+	var entity T
+	err = json.NewDecoder(response.Body).Decode(&entity)
+	if err != nil {
+		fmt.Printf("%s on GET error: %s", url, err.Error())
+	}
+
+	return entity
+}
+
 func processEntityRemoving(url string) {
 	response, err := sendRequest(url, http.MethodDelete, nil)
 	if err != nil {
@@ -83,6 +99,12 @@ func main() {
 	addr = fmt.Sprintf("%s/%s/%d", url, "users", user.GetID())
 	processEntity(addr, http.MethodPost, user)
 
+	addr = fmt.Sprintf("%s/%s", url, "users")
+	userList := processEntityList[[]entities.User](addr)
+	for _, u := range userList {
+		fmt.Println(u)
+	}
+
 	// products
 	addr = fmt.Sprintf("%s/%s", url, "products")
 	products := []*entities.Product{
@@ -103,6 +125,12 @@ func main() {
 		processEntity(addr, http.MethodPost, p)
 	}
 
+	addr = fmt.Sprintf("%s/%s", url, "products")
+	productList := processEntityList[[]entities.Product](addr)
+	for _, p := range productList {
+		fmt.Println(p)
+	}
+
 	// order
 	order := &entities.Order{
 		UserID:    user.GetID(),
@@ -112,12 +140,15 @@ func main() {
 	addr = fmt.Sprintf("%s/%s", url, "orders")
 	processEntity(addr, http.MethodPost, order)
 
-	for _, p := range products {
-		p.Price /= 10
-	}
 	order.OrderDate = time.Date(2024, time.April, 22, 5, 0, 0, 0, time.Local)
 	addr = fmt.Sprintf("%s/%s/%d", url, "orders", order.GetID())
 	processEntity(addr, http.MethodPost, order)
+
+	addr = fmt.Sprintf("%s/%s", url, "orders")
+	orderList := processEntityList[[]entities.Order](addr)
+	for _, o := range orderList {
+		fmt.Println(o)
+	}
 
 	// data removing
 	addr = fmt.Sprintf("%s/%s/%d", url, "orders", order.GetID())

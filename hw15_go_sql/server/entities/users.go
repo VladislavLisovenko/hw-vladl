@@ -7,6 +7,6 @@ type User struct {
 	Password string `json:"password"`
 }
 
-func (u *User) GetID() int {
+func (u User) GetID() int {
 	return u.ID
 }

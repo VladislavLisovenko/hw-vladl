@@ -28,7 +28,7 @@ func decodeEntity[T Entity](w http.ResponseWriter, r *http.Request) T {
 	return entity
 }
 
-func decodeEntityID[T Entity](w http.ResponseWriter, r *http.Request) int {
+func decodeEntityID(w http.ResponseWriter, r *http.Request) int {
 	id, err := strconv.Atoi(chi.URLParam(r, "id"))
 	if err != nil {
 		w.WriteHeader(http.StatusBadRequest)

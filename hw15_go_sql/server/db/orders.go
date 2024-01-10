@@ -2,6 +2,7 @@ package db
 
 import (
 	"context"
+	"time"
 
 	"github.com/VladislavLisovenko/hw-vladl/hw15_go_sql/server/entities"
 )
@@ -130,4 +131,103 @@ func DeleteOrder(id int) error {
 	}
 
 	return nil
+}
+
+func OrderList() ([]entities.Order, error) {
+	queryString := `
+	SELECT 
+		ID,
+		USER_ID,
+		ORDER_DATE,
+		TOTAL_AMOUNT
+	FROM PUBLIC."Orders"`
+	orderRows, err := database.Query(queryString)
+	if err != nil {
+		return nil, err
+	}
+	defer orderRows.Close()
+
+	orderList := make([]entities.Order, 0)
+	for orderRows.Next() {
+		var orderID int
+		var userID int
+		var operDate time.Time
+		var totalAmount float64
+		if err = orderRows.Scan(&orderID, &userID, &operDate, &totalAmount); err != nil {
+			return nil, err
+		}
+		order := entities.Order{
+			ID:          orderID,
+			UserID:      userID,
+			OrderDate:   operDate,
+			TotalAmount: totalAmount,
+			// Products:    make([]entities.Product, 0),
+		}
+		orderList = append(orderList, order)
+	}
+
+	queryString = `
+	SELECT 
+		O.ORDER_ID,
+		O.PRODUCT_ID,
+		P.NAME,
+		P.PRICE
+	FROM PUBLIC."OrderProducts" AS O
+	INNER JOIN PUBLIC."Products" AS P 
+	ON O.PRODUCT_ID = P.ID
+	ORDER BY O.ORDER_ID`
+
+	productRows, err := database.Query(queryString)
+	if err != nil {
+		return nil, err
+	}
+	defer productRows.Close()
+
+	productList := make([]struct {
+		OrderID      int
+		ProductID    int
+		ProductName  string
+		ProductPrice float64
+	}, 0)
+
+	for productRows.Next() {
+		var orderID int
+		var productID int
+		var productName string
+		var productPrice float64
+
+		if err = productRows.Scan(&orderID, &productID, &productName, &productPrice); err != nil {
+			return nil, err
+		}
+		productList = append(productList, struct {
+			OrderID      int
+			ProductID    int
+			ProductName  string
+			ProductPrice float64
+		}{
+			OrderID:      orderID,
+			ProductID:    productID,
+			ProductName:  productName,
+			ProductPrice: productPrice,
+		})
+	}
+
+	newOrderList := make([]entities.Order, 0)
+	for _, o := range orderList {
+		products := make([]*entities.Product, 0)
+		for _, p := range productList {
+			if o.GetID() != p.OrderID {
+				continue
+			}
+			products = append(products, &entities.Product{
+				ID:    p.ProductID,
+				Name:  p.ProductName,
+				Price: p.ProductPrice,
+			})
+		}
+		o.Products = products
+		newOrderList = append(newOrderList, o)
+	}
+
+	return newOrderList, nil
 }

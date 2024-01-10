@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -10,28 +11,40 @@ import (
 )
 
 func AddProduct(w http.ResponseWriter, r *http.Request) {
-	entity := decodeEntity[entities.Product](w, r)
+	product := decodeEntity[entities.Product](w, r)
 
-	id, err := db.AddProduct(entity)
+	productID, err := db.AddProduct(product)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	w.Header().Add("id", strconv.Itoa(id))
+	w.Header().Add("id", strconv.Itoa(productID))
 }
 
-func UpdateProduct(w http.ResponseWriter, r *http.Request) {
-	entity := decodeEntity[entities.Product](w, r)
-
-	err := db.UpdateProduct(entity)
+func ProductList(w http.ResponseWriter, _ *http.Request) {
+	productList, err := db.ProductList()
 	if err != nil {
 		fmt.Println(err.Error())
 	}
+	productListDecoded, err := json.Marshal(productList)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	w.Write(productListDecoded)
 }
 
 func DeleteProduct(w http.ResponseWriter, r *http.Request) {
-	entityID := decodeEntityID[entities.Product](w, r)
+	productID := decodeEntityID(w, r)
 
-	err := db.DeleteProduct(entityID)
+	err := db.DeleteProduct(productID)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+}
+
+func UpdateProduct(w http.ResponseWriter, r *http.Request) {
+	product := decodeEntity[entities.Product](w, r)
+
+	err := db.UpdateProduct(product)
 	if err != nil {
 		fmt.Println(err.Error())
 	}

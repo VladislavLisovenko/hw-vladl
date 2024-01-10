@@ -10,6 +10,6 @@ type Order struct {
 	Products    []*Product `json:"products"`
 }
 
-func (o *Order) GetID() int {
+func (o Order) GetID() int {
 	return o.ID
 }

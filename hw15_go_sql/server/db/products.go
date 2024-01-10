@@ -48,3 +48,32 @@ func DeleteProduct(id int) error {
 
 	return nil
 }
+
+func ProductList() ([]entities.Product, error) {
+	queryString := `
+	SELECT id, name, price 
+	FROM public."Products"`
+	rows, err := database.Query(queryString)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	productList := make([]entities.Product, 0)
+	for rows.Next() {
+		var id int
+		var name string
+		var price float64
+		if err = rows.Scan(&id, &name, &price); err != nil {
+			return nil, err
+		}
+		productList = append(productList, entities.Product{
+			ID:    id,
+			Name:  name,
+			Price: price,
+		},
+		)
+	}
+
+	return productList, nil
+}

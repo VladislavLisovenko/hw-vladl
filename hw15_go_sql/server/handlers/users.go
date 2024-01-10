@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -10,29 +11,41 @@ import (
 )
 
 func AddUser(w http.ResponseWriter, r *http.Request) {
-	entity := decodeEntity[entities.User](w, r)
+	user := decodeEntity[entities.User](w, r)
 
-	id, err := db.AddUser(entity)
+	userID, err := db.AddUser(user)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	w.Header().Add("id", strconv.Itoa(id))
+	w.Header().Add("id", strconv.Itoa(userID))
 }
 
 func UpdateUser(w http.ResponseWriter, r *http.Request) {
-	entity := decodeEntity[entities.User](w, r)
+	user := decodeEntity[entities.User](w, r)
 
-	err := db.UpdateUser(entity)
+	err := db.UpdateUser(user)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
 }
 
 func DeleteUser(w http.ResponseWriter, r *http.Request) {
-	entityID := decodeEntityID[entities.User](w, r)
+	userID := decodeEntityID(w, r)
 
-	err := db.DeleteUser(entityID)
+	err := db.DeleteUser(userID)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
+}
+
+func UserList(w http.ResponseWriter, _ *http.Request) {
+	userList, err := db.UserList()
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	userListDecoded, err := json.Marshal(userList)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	w.Write(userListDecoded)
 }

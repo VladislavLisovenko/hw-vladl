@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"strconv"
@@ -9,29 +10,41 @@ import (
 	"github.com/VladislavLisovenko/hw-vladl/hw15_go_sql/server/entities"
 )
 
-func AddOrder(w http.ResponseWriter, r *http.Request) {
-	entity := decodeEntity[entities.Order](w, r)
-
-	id, err := db.AddOrder(entity)
+func OrderList(w http.ResponseWriter, _ *http.Request) {
+	orderList, err := db.OrderList()
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	w.Header().Add("id", strconv.Itoa(id))
+	orderListDecoded, err := json.Marshal(orderList)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	w.Write(orderListDecoded)
 }
 
 func UpdateOrder(w http.ResponseWriter, r *http.Request) {
-	entity := decodeEntity[entities.Order](w, r)
+	order := decodeEntity[entities.Order](w, r)
 
-	err := db.UpdateOrder(entity)
+	err := db.UpdateOrder(order)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
 }
 
-func DeleteOrder(w http.ResponseWriter, r *http.Request) {
-	entityID := decodeEntityID[entities.Order](w, r)
+func AddOrder(w http.ResponseWriter, r *http.Request) {
+	order := decodeEntity[entities.Order](w, r)
 
-	err := db.DeleteOrder(entityID)
+	orderID, err := db.AddOrder(order)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	w.Header().Add("id", strconv.Itoa(orderID))
+}
+
+func DeleteOrder(w http.ResponseWriter, r *http.Request) {
+	orderID := decodeEntityID(w, r)
+
+	err := db.DeleteOrder(orderID)
 	if err != nil {
 		fmt.Println(err.Error())
 	}

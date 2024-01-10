@@ -6,7 +6,7 @@ type Product struct {
 	Price float64 `json:"price"`
 }
 
-func (p *Product) GetID() int {
+func (p Product) GetID() int {
 	return p.ID
 }
 

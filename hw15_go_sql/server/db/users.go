@@ -47,3 +47,32 @@ func DeleteUser(id int) error {
 
 	return nil
 }
+
+func UserList() ([]entities.User, error) {
+	queryString := `
+	SELECT id, name, email, password 
+	FROM public."Users"`
+	rows, err := database.Query(queryString)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	userList := make([]entities.User, 0)
+	for rows.Next() {
+		var userID int
+		var name, email, password string
+		if err = rows.Scan(&userID, &name, &email, &password); err != nil {
+			return nil, err
+		}
+		userList = append(userList, entities.User{
+			ID:       userID,
+			Name:     name,
+			Email:    email,
+			Password: password,
+		},
+		)
+	}
+
+	return userList, nil
+}

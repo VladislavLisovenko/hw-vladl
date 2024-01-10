@@ -20,14 +20,17 @@ func main() {
 	router := chi.NewRouter()
 
 	router.Post("/users", handlers.AddUser)
+	router.Get("/users", handlers.UserList)
 	router.Post("/users/{id:[0-9]+}", handlers.UpdateUser)
 	router.Delete("/users/{id:[0-9]+}", handlers.DeleteUser)
 
 	router.Post("/products", handlers.AddProduct)
+	router.Get("/products", handlers.ProductList)
 	router.Post("/products/{id:[0-9]+}", handlers.UpdateProduct)
 	router.Delete("/products/{id:[0-9]+}", handlers.DeleteProduct)
 
 	router.Post("/orders", handlers.AddOrder)
+	router.Get("/orders", handlers.OrderList)
 	router.Post("/orders/{id:[0-9]+}", handlers.UpdateOrder)
 	router.Delete("/orders/{id:[0-9]+}", handlers.DeleteOrder)
 
