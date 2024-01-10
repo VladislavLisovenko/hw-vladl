@@ -2,7 +2,10 @@ module github.com/VladislavLisovenko/hw-vladl/hw15_go_sql
 
 go 1.20
 
-require github.com/jackc/pgx v3.6.2+incompatible
+require (
+	github.com/go-chi/chi v1.5.5
+	github.com/jackc/pgx v3.6.2+incompatible
+)
 
 require (
 	github.com/cockroachdb/apd v1.1.0 // indirect
