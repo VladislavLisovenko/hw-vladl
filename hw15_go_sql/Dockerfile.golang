@@ -1,0 +1,10 @@
+FROM golang:1.20 AS builder
+WORKDIR /usr/lib/go
+COPY . .
+RUN go mod tidy
+RUN go build -o serverapp server/server.go
+
+FROM go-docker-container
+WORKDIR /usr/lib/gorun
+COPY --from=builder usr/lib/go ./
+ENTRYPOINT ["./serverapp" ]
