@@ -86,3 +86,27 @@ TABLESPACE pg_default;
 
 ALTER TABLE IF EXISTS public."OrderProducts"
     OWNER to postgres;
+
+INSERT INTO public."Users"(
+	name, email, password)
+	VALUES ('Dmitriy', 'dm@dm.dm', 'sec1'),
+	('Andrey', 'an@an.an', 'sec2'),
+	('Nikolay', 'ni@ni.ni', 'sec3');
+	
+INSERT INTO public."Products"(
+	name, price)
+	VALUES ('Computer', 10000.00),
+	('Chair', 2000.00);
+	
+INSERT INTO public."Orders"(
+	user_id, order_date, total_amount)
+	VALUES (1, '2024-01-20', 12000),
+	(2, '2024-01-21', 10000),
+	(3, '2024-01-22', 2000);
+	
+INSERT INTO public."OrderProducts"(
+	order_id, product_id)
+	VALUES (1, 1),
+	(1, 2),
+	(2, 1),
+	(3, 2);
