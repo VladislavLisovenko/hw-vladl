@@ -6,10 +6,10 @@ func main() {
 	size := 0
 	fmt.Print("Enter chess board size: ")
 	fmt.Scanf("%d", &size)
-	draw(size)
+	Draw(size)
 }
 
-func draw(size int) {
+func Draw(size int) {
 	s := ""
 	for i := 1; i <= size; i++ {
 		for j := 1; j <= size; j++ {
