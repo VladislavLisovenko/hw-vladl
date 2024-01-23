@@ -1,6 +1,5 @@
 FROM golang:1.20-alpine as build
 
-USER root
 
 ENV BIN_FILE=/usr/app/serverapp
 ENV CODE_DIR=/go/src/
@@ -27,9 +26,4 @@ FROM alpine:3.9
 ENV BIN_FILE=/usr/app/serverapp
 COPY --from=build ${BIN_FILE} ${BIN_FILE}
 
-# ARG CONFIG_FILE ./configs/config.toml
-# ENV CONFIG_FILE_DST /etc/calendar/config.toml
-# COPY ${CONFIG_FILE} ${CONFIG_FILE_DST}
-
-# CMD ${BIN_FILE} -config ${CONFIG_FILE_DST}
 ENTRYPOINT ["./usr/app/serverapp"]

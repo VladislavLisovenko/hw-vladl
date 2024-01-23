@@ -15,8 +15,8 @@ func main() {
 
 	url := ""
 	port := ""
-	flag.StringVar(&url, "url", "localhost", "URL to listen from, without protocol, e.g. 'localhost'")
-	flag.StringVar(&port, "port", "5436", "Port to listen from")
+	flag.StringVar(&url, "url", "", "URL to listen from, without protocol, e.g. 'localhost'")
+	flag.StringVar(&port, "port", "8080", "Port to listen from")
 	flag.Parse()
 
 	router := chi.NewRouter()
