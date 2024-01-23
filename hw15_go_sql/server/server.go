@@ -11,9 +11,11 @@ import (
 )
 
 func main() {
+	fmt.Println("Server is started...")
+
 	url := ""
 	port := ""
-	flag.StringVar(&url, "url", "localhost", "URL to listen from, without protocol, e.g. 'localhost'")
+	flag.StringVar(&url, "url", "", "URL to listen from, without protocol, e.g. 'localhost'")
 	flag.StringVar(&port, "port", "8080", "Port to listen from")
 	flag.Parse()
 
@@ -40,5 +42,6 @@ func main() {
 		Handler:      router,
 	}
 	srv.Addr = fmt.Sprintf("%s:%s", url, port)
-	srv.ListenAndServe()
+	err := srv.ListenAndServe()
+	fmt.Printf("Server is stoped...: %s\n", err.Error())
 }

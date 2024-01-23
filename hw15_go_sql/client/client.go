@@ -80,7 +80,7 @@ func main() {
 	url := ""
 	port := ""
 	flag.StringVar(&url, "url", "http://localhost", "URL to send to")
-	flag.StringVar(&port, "port", "8080", "Port to send to")
+	flag.StringVar(&port, "port", "5436", "Port to send to")
 	flag.Parse()
 
 	url += ":" + port
